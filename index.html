@@ -1,225 +1,255 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Jersey Nova | Premium Sports Shop</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jersey Nova | Premium Sports Shop</title>
 
-<script src="https://cdn.tailwindcss.com"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Orbitron:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
-<style>
-body {
-    background-color: #0b1120;
-    color: #fff;
-    font-family: 'Inter', sans-serif;
-    padding-bottom: 70px;
-}
+    <style>
+        body {
+            background-color: #0b1120; /* Dark background from image */
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+            padding-bottom: 80px; /* space for bottom nav */
+        }
 
-.brand-font {
-    font-family: 'Orbitron', sans-serif;
-    letter-spacing: 2px;
-}
+        /* Branding font from image */
+        .brand-font {
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            text-shadow: 0 0 15px rgba(59, 130, 246, 0.5); /* Glow effect */
+        }
 
-.nav-icon {
-    font-size: 20px;
-    color: #fff;
-}
+        .nav-icon {
+            font-size: 20px;
+            color: #fff;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .nav-icon:hover {
+            color: #3b82f6;
+        }
 
-.category-card {
-    background: #1a2236;
-    border-radius: 12px;
-    overflow: hidden;
-    border-bottom: 3px solid #3b82f6;
-    cursor: pointer;
-}
+        /* Glitch profile icon from image_5.png */
+        .profile-glitch-wrapper {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+        }
+        .profile-glitch-icon {
+            font-size: 20px;
+            color: white;
+            position: relative;
+            z-index: 2;
+        }
+        .profile-glitch-wrapper::before,
+        .profile-glitch-wrapper::after {
+            content: "\f007"; /* FA User Icon Code */
+            font-family: "Font Awesome 6 Free";
+            font-weight: 400;
+            position: absolute;
+            top: 0; left: 0;
+            opacity: 0.8;
+            font-size: 20px;
+        }
+        .profile-glitch-wrapper::before {
+            color: #0ff; /* Cyan shadow */
+            z-index: 1;
+            transform: translate(-1px, -1px);
+        }
+        .profile-glitch-wrapper::after {
+            color: #f0f; /* Magenta shadow */
+            z-index: 0;
+            transform: translate(1px, 1px);
+        }
 
-.feature-box {
-    background: #161e2e;
-    border: 1px solid #2d3748;
-    padding: 10px;
-    border-radius: 8px;
-    text-align: center;
-}
+        .category-card {
+            background: #1a2236;
+            border-radius: 12px;
+            overflow: hidden;
+            border-bottom: 4px solid #3b82f6;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .category-card:active {
+            transform: scale(0.95);
+        }
 
-.feature-box i {
-    color: #3b82f6;
-    font-size: 18px;
-}
+        .feature-box {
+            background: #161e2e;
+            border: 1px solid #2d3748;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .feature-box i {
+            color: #3b82f6;
+            font-size: 18px;
+        }
+        .feature-box p {
+            font-size: 8px;
+            text-transform: uppercase;
+            color: #94a3b8;
+            margin-top: 4px;
+        }
 
-.feature-box p {
-    font-size: 8px;
-    text-transform: uppercase;
-    color: #94a3b8;
-}
-
-.bottom-nav {
-    background: #0f172a;
-    border-top: 1px solid #1e293b;
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    display: flex;
-    justify-content: space-around;
-    padding: 10px 0;
-}
-
-.nav-item {
-    text-align: center;
-    color: #94a3b8;
-    font-size: 10px;
-}
-
-.nav-item.active {
-    color: #3b82f6;
-}
-
-.nav-item i {
-    font-size: 18px;
-    display: block;
-}
-</style>
+        .bottom-nav {
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid #1e293b;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 0;
+            z-index: 100;
+        }
+        .nav-item {
+            text-align: center;
+            color: #94a3b8;
+            font-size: 10px;
+            cursor: pointer;
+            flex: 1;
+        }
+        .nav-item.active {
+            color: #3b82f6; /* Blue active state */
+        }
+        .nav-item i {
+            font-size: 18px;
+            display: block;
+            margin-bottom: 2px;
+        }
+    </style>
 </head>
 
 <body>
 
-<header class="flex items-center justify-between px-5 py-4 bg-[#0b1120] sticky top-0">
-<i class="fas fa-bars nav-icon"></i>
+<header class="flex items-center justify-between px-5 py-4 bg-[#0b1120] sticky top-0 z-50 border-b border-gray-800">
+    <i class="fas fa-bars nav-icon" onclick="toggleMenu()"></i>
 
-<div class="text-2xl font-bold text-blue-500 brand-font">
-JERSEY NOVA
-</div>
+    <div class="text-2xl font-bold text-blue-500 brand-font">
+        JERSEY NOVA
+    </div>
 
-<div class="flex space-x-4">
-<i class="far fa-user nav-icon"></i>
-</div>
+    <div class="flex items-center space-x-5">
+        <i class="fas fa-sun nav-icon" onclick="toggleDarkMode()"></i>
+        <div class="profile-glitch-wrapper" onclick="goPage('profile')">
+            <i class="far fa-user profile-glitch-icon"></i>
+        </div>
+    </div>
 </header>
 
-<!-- Banner -->
-
-<section class="px-2 mt-2">
-<img src="images/banner1.jpg"
-class="w-full rounded-xl">
+<section class="px-3 mt-3">
+    <div class="w-full h-40 bg-gradient-to-r from-blue-900 via-blue-700 to-black rounded-xl flex flex-col items-center justify-center border border-blue-500/30 p-5 text-center">
+        <p class="text-blue-200 text-xs font-bold uppercase tracking-wider">New Arrival</p>
+        <h1 class="text-2xl font-bold text-white mt-1">Uchiha Edition Jersey</h1>
+        <p class="text-blue-300 text-sm mt-1 italic">Limitless Style, Ultimate Comfort</p>
+    </div>
 </section>
 
-<!-- Features -->
-
-<section class="grid grid-cols-4 gap-2 px-3 mt-5">
-
-<div class="feature-box">
-<i class="fas fa-truck"></i>
-<p>FAST SHIPPING</p>
-</div>
-
-<div class="feature-box">
-<i class="fas fa-undo"></i>
-<p>EASY RETURN</p>
-</div>
-
-<div class="feature-box">
-<i class="fas fa-ribbon"></i>
-<p>PREMIUM</p>
-</div>
-
-<div class="feature-box">
-<i class="fas fa-headset"></i>
-<p>SUPPORT</p>
-</div>
-
+<section class="grid grid-cols-4 gap-2 px-3 mt-6">
+    <div class="feature-box">
+        <i class="fas fa-truck"></i>
+        <p>FAST SHIPPING</p>
+    </div>
+    <div class="feature-box">
+        <i class="fas fa-undo"></i>
+        <p>EASY RETURNS</p>
+    </div>
+    <div class="feature-box">
+        <i class="fas fa-ribbon"></i>
+        <p>PREMIUM QUALITY</p>
+    </div>
+    <div class="feature-box">
+        <i class="fas fa-headset"></i>
+        <p>24/7 SUPPORT</p>
+    </div>
 </section>
 
-<!-- Categories -->
-
-<div class="text-center mt-10">
-<h2 class="text-lg font-bold uppercase">
-Categories
-</h2>
+<div class="px-4 mt-10">
+    <h2 class="text-lg font-bold uppercase border-l-4 border-blue-500 pl-2">
+        Collections
+    </h2>
 </div>
 
 <section class="grid grid-cols-2 gap-4 px-4 mt-6">
-
-<div class="category-card"
-onclick="openCategory('IPL')">
-
-<img src="images/ipl-cat.jpg"
-class="w-full h-48 object-cover">
-
-<div class="p-3 text-center bg-[#1e293b]">
-IPL 2024
-</div>
-
-</div>
-
-<div class="category-card"
-onclick="openCategory('PSL')">
-
-<img src="images/psl-cat.jpg"
-class="w-full h-48 object-cover">
-
-<div class="p-3 text-center bg-[#1e293b]">
-PSL 2024
-</div>
-
-</div>
-
+    <div class="category-card" onclick="openCategory('IPL 2024')">
+        <div class="h-40 bg-gray-800 flex items-center justify-center text-gray-600 font-bold">IPL Jersey</div>
+        <div class="p-3 text-center bg-[#1e293b] font-bold text-blue-100">IPL 2024</div>
+    </div>
+    <div class="category-card" onclick="openCategory('PSL 2024')">
+        <div class="h-40 bg-gray-800 flex items-center justify-center text-gray-600 font-bold">PSL Jersey</div>
+        <div class="p-3 text-center bg-[#1e293b] font-bold text-blue-100">PSL 2024</div>
+    </div>
 </section>
 
-<!-- Bottom Nav -->
-
 <nav class="bottom-nav">
-
-<div class="nav-item active"
-onclick="goPage('home')">
-
-<i class="fas fa-home"></i>
-Home
-
-</div>
-
-<div class="nav-item"
-onclick="goPage('category')">
-
-<i class="fas fa-th-large"></i>
-Category
-
-</div>
-
-<div class="nav-item"
-onclick="goPage('search')">
-
-<i class="fas fa-search"></i>
-Search
-
-</div>
-
-<div class="nav-item"
-onclick="goPage('cart')">
-
-<i class="fas fa-shopping-cart"></i>
-Cart
-
-</div>
-
-<div class="nav-item"
-onclick="goPage('wishlist')">
-
-<i class="far fa-heart"></i>
-Wishlist
-
-</div>
-
+    <div class="nav-item active" id="nav-home" onclick="handleNav(this, 'home')">
+        <i class="fas fa-home"></i>
+        Home
+    </div>
+    <div class="nav-item" id="nav-category" onclick="handleNav(this, 'category')">
+        <i class="fas fa-th-large"></i>
+        Category
+    </div>
+    <div class="nav-item" id="nav-search" onclick="handleNav(this, 'search')">
+        <i class="fas fa-search"></i>
+        Search
+    </div>
+    <div class="nav-item" id="nav-cart" onclick="handleNav(this, 'cart')">
+        <i class="fas fa-shopping-cart"></i>
+        Cart
+    </div>
+    <div class="nav-item" id="nav-wishlist" onclick="handleNav(this, 'wishlist')">
+        <i class="far fa-heart"></i>
+        Wishlist
+    </div>
 </nav>
 
 <script>
+    // 1. সব ক্যাটাগরি এবং পেজ ফাংশন ঠিক করা হয়েছে।
+    
+    // ক্যাটাগরি ওপেন করার জন্য ফাংশন
+    function openCategory(categoryName) {
+        console.log("Opening category: " + categoryName);
+        alert(categoryName + " Category Opening... (This will soon redirect)");
+        // Future: window.location.href = '/category/' + categoryName.toLowerCase().replace(' ', '-');
+    }
 
-function openCategory(name) {
-    alert(name + " Category Open");
-}
+    // পেজ রিডাইরেক্টের জন্য ফাংশন
+    function goPage(pageName) {
+        console.log("Navigating to page: " + pageName);
+        alert("Navigating to: " + pageName + " page... (Under construction)");
+        // Future: window.location.href = '/' + pageName;
+    }
 
-function goPage(page) {
-    alert("Opening " + page);
-}
+    // 2. নিচের নেভিগেশনে একটিভ ক্লাস হ্যান্ডেল করার জন্য নতুন ফাংশন
+    function handleNav(element, pageName) {
+        // সব আইটেম থেকে 'active' ক্লাস সরিয়ে ফেলা
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.classList.remove('active');
+        });
+        
+        // ক্লিক করা আইটেমে 'active' ক্লাস যোগ করা
+        element.classList.add('active');
+        
+        // ফাংশন কল করা
+        goPage(pageName);
+    }
 
+    // অতিরিক্ত ফাংশন: মেনু এবং ডার্ক মোড
+    function toggleMenu() {
+        alert("Main Menu Toggle Clicked!");
+    }
+    function toggleDarkMode() {
+        alert("Dark Mode Toggle Clicked! (Future Theme Switcher)");
+    }
 </script>
 
 </body>
