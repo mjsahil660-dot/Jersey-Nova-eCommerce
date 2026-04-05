@@ -1,275 +1,317 @@
-import React, { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { ShoppingCart, Upload, X } from "lucide-react";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jersey Nova | Premium Sportswear</title>
+    <style>
+        /* --- Brand Theme & Colors --- */
+        :root {
+            --bg-color: #121212;
+            --accent-orange: #ff6b00;
+            --accent-blue: #00e5ff;
+            --text-light: #f5f5f5;
+            --success-green: #39ff14;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
 
-// ===== Firebase Placeholder =====
-// Replace with your real Firebase config
-const firebaseConfig = {
-  databaseURL: "https://jersey-nova-default-rtdb.firebaseio.com",
-};
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-light);
+            overflow-x: hidden;
+        }
 
-export default function JerseyNovaApp() {
-  const [products, setProducts] = useState([]);
-  const [showLogin, setShowLogin] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [holdTimer, setHoldTimer] = useState(null);
+        /* --- Sticky Header --- */
+        header {
+            position: sticky;
+            top: 0;
+            background: rgba(18, 18, 18, 0.9);
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 5%;
+            z-index: 100;
+            border-bottom: 1px solid var(--glass-border);
+        }
 
-  const [form, setForm] = useState({
-    title: "",
-    price: "",
-    category: "Football",
-    details: "",
-    image: null,
-  });
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--text-light);
+            text-shadow: 0 0 10px var(--accent-orange);
+            text-decoration: none;
+        }
 
-  // ===== Hidden Admin Trigger =====
-  const handleMouseDown = () => {
-    const timer = setTimeout(() => {
-      setShowLogin(true);
-    }, 3000);
-    setHoldTimer(timer);
-  };
+        .search-bar {
+            padding: 8px 15px;
+            border-radius: 20px;
+            border: 1px solid var(--glass-border);
+            background: var(--glass-bg);
+            color: white;
+            width: 300px;
+            outline: none;
+        }
 
-  const handleMouseUp = () => {
-    clearTimeout(holdTimer);
-  };
+        /* --- Hero Section --- */
+        .hero {
+            height: 40vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(45deg, #1a1a1a, #0a0a0a);
+            border-bottom: 1px solid var(--glass-border);
+            text-align: center;
+        }
 
-  // ===== Login Check =====
-  const handleLogin = (e) => {
-    e.preventDefault();
-    const email = e.target.email.value;
-    const password = e.target.password.value;
+        .btn-shop {
+            padding: 10px 25px;
+            background-color: var(--accent-orange);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 15px;
+            box-shadow: 0 0 15px rgba(255, 107, 0, 0.4);
+            transition: 0.3s;
+        }
 
-    if (email === "admin@jersey.com" && password === "sahil882") {
-      setIsAdmin(true);
-      setShowLogin(false);
-    } else {
-      alert("Access Denied");
-    }
-  };
+        .btn-shop:hover {
+            box-shadow: 0 0 25px rgba(255, 107, 0, 0.8);
+            transform: scale(1.05);
+        }
 
-  // ===== Image Upload =====
-  const handleImage = (file) => {
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setForm({ ...form, image: reader.result });
-    };
-    reader.readAsDataURL(file);
-  };
+        /* --- Product Grid (Magic Grid) --- */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 40px 5%;
+        }
 
-  const handleDrop = (e) => {
-    e.preventDefault();
-    const file = e.dataTransfer.files[0];
-    if (file) handleImage(file);
-  };
+        .product-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            padding: 15px;
+            text-align: center;
+            backdrop-filter: blur(5px);
+            transition: 0.3s;
+        }
 
-  const handlePublish = () => {
-    if (!form.title || !form.price || !form.image) {
-      alert("Fill all fields");
-      return;
-    }
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0, 229, 255, 0.2);
+        }
 
-    setProducts([...products, form]);
+        .product-img {
+            width: 100%;
+            height: 200px;
+            background-color: #222;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            object-fit: cover;
+        }
 
-    setForm({
-      title: "",
-      price: "",
-      category: "Football",
-      details: "",
-      image: null,
-    });
+        .btn-whatsapp {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #25D366;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
 
-    alert("Product Published Successfully");
-  };
+        /* --- Footer & Secret Trigger --- */
+        footer {
+            text-align: center;
+            padding: 30px;
+            border-top: 1px solid var(--glass-border);
+            margin-top: 50px;
+        }
 
-  return (
-    <div className="min-h-screen bg-[#121212] text-white">
-      {/* Header */}
-      <header className="sticky top-0 bg-black/80 backdrop-blur border-b border-gray-800 z-50">
-        <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
-          <h1 className="text-xl font-bold text-orange-500 drop-shadow-lg">
-            Jersey Nova
-          </h1>
+        #secret-trigger {
+            cursor: default; /* Keep it looking normal */
+            user-select: none;
+        }
 
-          <input
-            type="text"
-            placeholder="Search jersey code..."
-            className="bg-gray-900 px-3 py-2 rounded-xl w-1/3 text-sm"
-          />
+        /* --- Hidden Login Modal --- */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(10px);
+            z-index: 999;
+            justify-content: center;
+            align-items: center;
+        }
 
-          <ShoppingCart className="w-6 h-6" />
+        .login-box {
+            background: var(--bg-color);
+            padding: 30px;
+            border-radius: 15px;
+            border: 1px solid var(--accent-blue);
+            box-shadow: 0 0 30px rgba(0, 229, 255, 0.2);
+            text-align: center;
+        }
+
+        .login-box input {
+            display: block;
+            width: 90%;
+            margin: 10px auto;
+            padding: 10px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            color: white;
+        }
+
+        /* --- Admin Dashboard UI --- */
+        .admin-dashboard {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 60vh;
+            background: #1a1a1a;
+            border-top: 2px solid var(--accent-orange);
+            z-index: 1000;
+            padding: 20px;
+            box-sizing: border-box;
+            animation: slideUp 0.5s ease-out;
+            overflow-y: auto;
+        }
+
+        @keyframes slideUp {
+            from { bottom: -100%; }
+            to { bottom: 0; }
+        }
+
+        .upload-zone {
+            border: 2px dashed var(--accent-orange);
+            padding: 40px;
+            text-align: center;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            color: var(--text-light);
+            transition: 0.3s;
+        }
+
+        .upload-zone:hover {
+            border-color: var(--success-green);
+            background: rgba(57, 255, 20, 0.05);
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="#" class="logo">JERSEY NOVA</a>
+        <input type="text" class="search-bar" placeholder="Search jersey code...">
+        <div>🛒</div>
+    </header>
+
+    <div class="hero">
+        <span style="background: var(--accent-blue); padding: 5px 10px; border-radius: 5px; font-size: 12px; margin-bottom: 10px; color: black; font-weight: bold;">TRENDING NOW</span>
+        <h1>Uchiha Anime Edition</h1>
+        <p>Premium 180 GSM Microfiber</p>
+        <button class="btn-shop">Shop Now</button>
+    </div>
+
+    <div class="grid-container">
+        <div class="product-card">
+            <div class="product-img"></div>
+            <h3>DEE-422 Dragon</h3>
+            <p style="color: var(--accent-orange); font-size: 18px; font-weight: bold;">৳ 850</p>
+            <a href="https://wa.me/8801907966882?text=Hello,%20I%20want%20to%20order%20DEE-422%20Dragon" target="_blank" class="btn-whatsapp">Order on WhatsApp</a>
         </div>
-      </header>
+        <div class="product-card">
+            <div class="product-img"></div>
+            <h3>Argentina Retro</h3>
+            <p style="color: var(--accent-orange); font-size: 18px; font-weight: bold;">৳ 750</p>
+            <a href="https://wa.me/8801907966882?text=Hello,%20I%20want%20to%20order%20Argentina%20Retro" target="_blank" class="btn-whatsapp">Order on WhatsApp</a>
+        </div>
+    </div>
 
-      {/* Hero */}
-      <section className="p-6 text-center">
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="bg-gradient-to-r from-orange-500 to-blue-500 rounded-2xl p-10 shadow-lg"
-        >
-          <h2 className="text-3xl font-bold mb-2">Trending Now</h2>
-          <p>Dragon Edition & Anime Jerseys</p>
-        </motion.div>
-      </section>
+    <footer>
+        <p id="secret-trigger">© 2026 Jersey Nova BD. All Rights Reserved.</p>
+        <a href="https://www.facebook.com/JerseyNovaBD" target="_blank" style="color: gray; text-decoration: none;">Visit Facebook Page</a>
+    </footer>
 
-      {/* Product Grid */}
-      <section className="max-w-7xl mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-4">
-        {products.map((p, i) => (
-          <motion.div
-            key={i}
-            whileHover={{ scale: 1.05 }}
-            className="bg-white/5 backdrop-blur rounded-2xl p-3 shadow"
-          >
-            <img
-              src={p.image}
-              alt="jersey"
-              className="rounded-xl mb-2"
-            />
+    <div id="login-modal" class="modal">
+        <div class="login-box">
+            <h2 style="color: var(--accent-blue);">Admin Access</h2>
+            <input type="email" id="admin-email" placeholder="Email">
+            <input type="password" id="admin-pass" placeholder="Password">
+            <button class="btn-shop" onclick="checkLogin()" style="width: 90%;">Login</button>
+            <p id="error-msg" style="color: red; display: none; font-size: 14px;">Access Denied</p>
+            <button onclick="closeModal()" style="margin-top: 15px; background: none; color: gray; border: none; cursor: pointer;">Cancel</button>
+        </div>
+    </div>
 
-            <h3 className="font-semibold">{p.title}</h3>
-            <p className="text-orange-400">৳ {p.price}</p>
+    <div id="admin-dashboard" class="admin-dashboard">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h2 style="color: var(--accent-orange); margin: 0;">Jersey Nova Command Center</h2>
+            <button onclick="closeAdmin()" style="background: red; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer;">Close Dashboard</button>
+        </div>
 
-            <a
-              href="https://wa.me/8801907966882"
-              target="_blank"
-              className="block mt-2 bg-green-600 text-center py-2 rounded-xl"
-            >
-              Order on WhatsApp
-            </a>
-          </motion.div>
-        ))}
-      </section>
+        <div class="upload-zone" id="drop-zone">
+            ☁️ Drag & Drop Jersey Image Here
+        </div>
 
-      {/* Footer Hidden Trigger */}
-      <footer className="text-center text-gray-400 mt-10 py-6">
-        <span
-          onMouseDown={handleMouseDown}
-          onMouseUp={handleMouseUp}
-          onDoubleClick={() => setShowLogin(true)}
-          className="cursor-pointer"
-        >
-          © 2026 Jersey Nova
-        </span>
-      </footer>
-
-      {/* Login Modal */}
-      <AnimatePresence>
-        {showLogin && (
-          <motion.div
-            className="fixed inset-0 bg-black/70 flex items-center justify-center"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-          >
-            <motion.form
-              onSubmit={handleLogin}
-              className="bg-gray-900 p-6 rounded-2xl w-80 space-y-3"
-            >
-              <h2 className="text-xl font-bold text-center">Admin Login</h2>
-
-              <input
-                name="email"
-                placeholder="Email"
-                className="w-full p-2 rounded bg-black"
-              />
-
-              <input
-                name="password"
-                type="password"
-                placeholder="Password"
-                className="w-full p-2 rounded bg-black"
-              />
-
-              <button className="w-full bg-orange-500 py-2 rounded">
-                Login
-              </button>
-            </motion.form>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Admin Panel */}
-      <AnimatePresence>
-        {isAdmin && (
-          <motion.div
-            initial={{ y: "100%" }}
-            animate={{ y: 0 }}
-            exit={{ y: "100%" }}
-            className="fixed bottom-0 left-0 right-0 bg-gray-950 border-t border-gray-800 p-6 grid md:grid-cols-2 gap-6"
-          >
-            <div
-              onDragOver={(e) => e.preventDefault()}
-              onDrop={handleDrop}
-              className="border-2 border-dashed border-gray-600 rounded-2xl p-6 text-center"
-            >
-              <Upload className="mx-auto mb-2" />
-              <p>Drag & Drop Image</p>
-
-              {form.image && (
-                <img
-                  src={form.image}
-                  alt="preview"
-                  className="mt-3 rounded-xl"
-                />
-              )}
-
-              <input
-                type="file"
-                className="mt-3"
-                onChange={(e) => handleImage(e.target.files[0])}
-              />
-            </div>
-
-            <div className="space-y-2">
-              <input
-                placeholder="Jersey Name"
-                value={form.title}
-                onChange={(e) =>
-                  setForm({ ...form, title: e.target.value })
-                }
-                className="w-full p-2 rounded bg-black"
-              />
-
-              <input
-                placeholder="Price"
-                value={form.price}
-                onChange={(e) =>
-                  setForm({ ...form, price: e.target.value })
-                }
-                className="w-full p-2 rounded bg-black"
-              />
-
-              <select
-                value={form.category}
-                onChange={(e) =>
-                  setForm({ ...form, category: e.target.value })
-                }
-                className="w-full p-2 rounded bg-black"
-              >
+        <div style="display: grid; gap: 10px; max-width: 400px;">
+            <input type="text" placeholder="Product Title (e.g., DEE-422)" style="padding: 10px; background: #333; color: white; border: none;">
+            <input type="number" placeholder="Price (৳)" style="padding: 10px; background: #333; color: white; border: none;">
+            <select style="padding: 10px; background: #333; color: white; border: none;">
                 <option>Football</option>
                 <option>Cricket</option>
                 <option>Anime</option>
-              </select>
-
-              <textarea
-                placeholder="Details"
-                value={form.details}
-                onChange={(e) =>
-                  setForm({ ...form, details: e.target.value })
-                }
-                className="w-full p-2 rounded bg-black"
-              />
-
-              <button
-                onClick={handlePublish}
-                className="w-full bg-green-600 py-3 rounded-xl font-bold"
-              >
-                Push to Live
-              </button>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+            </select>
+            <button class="btn-shop" style="width: 100%; background: var(--success-green); color: black;">Push to Live</button>
+        </div>
     </div>
-  );
-}
+
+    <script>
+        const secretTrigger = document.getElementById('secret-trigger');
+        const loginModal = document.getElementById('login-modal');
+        const adminDashboard = document.getElementById('admin-dashboard');
+        const errorMsg = document.getElementById('error-msg');
+
+        // Double Click Logic to open Secret Door
+        secretTrigger.addEventListener('dblclick', () => {
+            loginModal.style.display = 'flex';
+        });
+
+        function closeModal() {
+            loginModal.style.display = 'none';
+            errorMsg.style.display = 'none';
+        }
+
+        // Basic password check (Will be replaced by Firebase later)
+        function checkLogin() {
+            const pass = document.getElementById('admin-pass').value;
+            if(pass === "nova2026") { // Temporary test password
+                loginModal.style.display = 'none';
+                adminDashboard.style.display = 'block';
+                document.getElementById('admin-pass').value = '';
+                errorMsg.style.display = 'none';
+            } else {
+                errorMsg.style.display = 'block';
+            }
+        }
+
+        function closeAdmin() {
+            adminDashboard.style.display = 'none';
+        }
+    </script>
+</body>
+</html>
