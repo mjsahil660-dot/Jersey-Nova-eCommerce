@@ -1,864 +1,275 @@
- (cd "$(git rev-parse --show-toplevel)" && git apply --3way <<'EOF' 
-diff --git a/index.html b/index.html
-index 98822a15997058b4dca3e6b90d92db09839e9ac2..4818b968194e41e1a0ddef517ea5bd5b62d8f234 100644
---- a/index.html
-+++ b/index.html
-@@ -1,256 +1,655 @@
- <!DOCTYPE html>
- <html lang="en">
- <head>
--    <meta charset="UTF-8">
--    <meta name="viewport" content="width=device-width, initial-scale=1.0">
--    <title>Jersey Nova | Premium Sports Shop</title>
--
-+    <meta charset="UTF-8" />
-+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-+    <title>Jersey Nova | Premium Sporty Dark Storefront</title>
-     <script src="https://cdn.tailwindcss.com"></script>
--    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Orbitron:wght@700&display=swap" rel="stylesheet">
--    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
--
-+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet" />
-+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
-     <style>
-+        :root {
-+            --matte-black: #121212;
-+            --soft-black: #1b1b1b;
-+            --panel-black: #181818;
-+            --off-white: #f3f3f2;
-+            --electric-orange: #ff6a00;
-+            --neon-blue: #00d4ff;
-+            --success-green: #22c55e;
-+        }
-+
-+        * { box-sizing: border-box; }
-+
-         body {
--            background-color: #0b1120; /* Dark background from image */
--            color: #fff;
-+            margin: 0;
-+            background: radial-gradient(circle at 10% 10%, #1f1f1f 0%, var(--matte-black) 35%, #0c0c0c 100%);
-+            color: var(--off-white);
-             font-family: 'Inter', sans-serif;
--            padding-bottom: 80px; /* space for bottom nav */
-+            min-height: 100vh;
-         }
- 
--        /* Branding font from image */
--        .brand-font {
-+        .brand {
-             font-family: 'Orbitron', sans-serif;
-+            font-weight: 800;
-             letter-spacing: 2px;
-             text-transform: uppercase;
--            text-shadow: 0 0 15px rgba(59, 130, 246, 0.5); /* Glow effect */
-+            color: var(--off-white);
-+            text-shadow: 0 0 6px rgba(255, 106, 0, 0.6), 0 0 14px rgba(0, 212, 255, 0.45);
-         }
- 
--        .nav-icon {
--            font-size: 20px;
--            color: #fff;
--            cursor: pointer;
--            transition: color 0.2s;
--        }
--        .nav-icon:hover {
--            color: #3b82f6;
-+        .glass {
-+            background: rgba(255, 255, 255, 0.06);
-+            border: 1px solid rgba(255, 255, 255, 0.14);
-+            backdrop-filter: blur(14px);
-         }
- 
--        /* Glitch profile icon from image_5.png */
--        .profile-glitch-wrapper {
--            position: relative;
--            display: inline-block;
--            cursor: pointer;
-+        .sport-btn {
-+            background: linear-gradient(120deg, var(--electric-orange), #ff8a00);
-+            color: #111;
-+            border: none;
-+            font-weight: 700;
-+            transition: transform 0.2s ease, filter 0.2s ease;
-         }
--        .profile-glitch-icon {
--            font-size: 20px;
--            color: white;
-+        .sport-btn:hover {
-+            transform: translateY(-1px);
-+            filter: brightness(1.07);
-+        }
-+
-+        .hero {
-             position: relative;
--            z-index: 2;
-+            border-radius: 18px;
-+            overflow: hidden;
-+            min-height: 280px;
-+            border: 1px solid rgba(255, 255, 255, 0.15);
-+            background-size: cover;
-+            background-position: center;
-+            transition: background-image 0.6s ease;
-         }
--        .profile-glitch-wrapper::before,
--        .profile-glitch-wrapper::after {
--            content: "\f007"; /* FA User Icon Code */
--            font-family: "Font Awesome 6 Free";
--            font-weight: 400;
-+        .hero::after {
-+            content: "";
-             position: absolute;
--            top: 0; left: 0;
--            opacity: 0.8;
--            font-size: 20px;
-+            inset: 0;
-+            background: linear-gradient(180deg, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.72));
-         }
--        .profile-glitch-wrapper::before {
--            color: #0ff; /* Cyan shadow */
-+
-+        .hero-content {
-+            position: relative;
-             z-index: 1;
--            transform: translate(-1px, -1px);
-         }
--        .profile-glitch-wrapper::after {
--            color: #f0f; /* Magenta shadow */
--            z-index: 0;
--            transform: translate(1px, 1px);
-+
-+        .trending-badge {
-+            display: inline-flex;
-+            align-items: center;
-+            gap: 8px;
-+            border-radius: 999px;
-+            padding: 7px 14px;
-+            font-size: 12px;
-+            font-weight: 700;
-+            text-transform: uppercase;
-+            letter-spacing: 1px;
-+            background: linear-gradient(90deg, rgba(255, 106, 0, 0.85), rgba(0, 212, 255, 0.85));
-+            color: #121212;
-+        }
-+
-+        .product-grid {
-+            display: grid;
-+            grid-template-columns: repeat(3, minmax(0, 1fr));
-+            gap: 20px;
-         }
- 
--        .category-card {
--            background: #1a2236;
--            border-radius: 12px;
-+        .product-card {
-+            border-radius: 16px;
-             overflow: hidden;
--            border-bottom: 4px solid #3b82f6;
--            cursor: pointer;
--            transition: transform 0.2s;
-+            border: 1px solid rgba(255, 255, 255, 0.12);
-+            background: rgba(255, 255, 255, 0.03);
-+        }
-+
-+        .flip-wrap {
-+            perspective: 1200px;
-+            height: 220px;
-+        }
-+
-+        .flip-inner {
-+            position: relative;
-+            width: 100%;
-+            height: 100%;
-+            transition: transform 0.55s ease;
-+            transform-style: preserve-3d;
-+        }
-+        .product-card:hover .flip-inner {
-+            transform: rotateY(180deg);
-+        }
-+
-+        .flip-face {
-+            position: absolute;
-+            inset: 0;
-+            backface-visibility: hidden;
-+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-+            background-size: cover;
-+            background-position: center;
-         }
--        .category-card:active {
--            transform: scale(0.95);
-+        .flip-back { transform: rotateY(180deg); }
-+
-+        .wa-btn {
-+            width: 100%;
-+            border-radius: 10px;
-+            border: 0;
-+            padding: 11px 12px;
-+            font-size: 14px;
-+            font-weight: 700;
-+            background: linear-gradient(90deg, #25d366, #1faa56);
-+            color: #06120a;
-         }
- 
--        .feature-box {
--            background: #161e2e;
--            border: 1px solid #2d3748;
--            padding: 10px;
--            border-radius: 8px;
-+        .hidden-admin-trigger {
-+            opacity: 0.03;
-+            user-select: none;
-+            cursor: pointer;
-+            font-size: 12px;
-             text-align: center;
-+            padding: 16px 8px;
-         }
--        .feature-box i {
--            color: #3b82f6;
--            font-size: 18px;
-+
-+        .overlay {
-+            position: fixed;
-+            inset: 0;
-+            background: rgba(0, 0, 0, 0.65);
-+            display: none;
-+            align-items: center;
-+            justify-content: center;
-+            z-index: 70;
-+            backdrop-filter: blur(6px);
-         }
--        .feature-box p {
--            font-size: 8px;
--            text-transform: uppercase;
--            color: #94a3b8;
--            margin-top: 4px;
-+
-+        .overlay.active { display: flex; }
-+
-+        .login-box {
-+            width: min(420px, 92vw);
-+            border-radius: 16px;
-+            padding: 24px;
-         }
- 
--        .bottom-nav {
--            background: rgba(15, 23, 42, 0.95);
--            backdrop-filter: blur(10px);
--            border-top: 1px solid #1e293b;
-+        .admin-dashboard {
-             position: fixed;
--            bottom: 0;
--            width: 100%;
--            display: flex;
--            justify-content: space-around;
--            padding: 12px 0;
--            z-index: 100;
-+            bottom: -105%;
-+            left: 0;
-+            right: 0;
-+            z-index: 80;
-+            transition: bottom 0.45s ease;
-+            border-top-left-radius: 20px;
-+            border-top-right-radius: 20px;
-+            border: 1px solid rgba(255, 255, 255, 0.14);
-+            background: linear-gradient(180deg, rgba(19, 19, 19, 0.98), rgba(12, 12, 12, 0.98));
-+            max-height: 86vh;
-+            overflow: auto;
-+            padding: 20px;
-         }
--        .nav-item {
-+
-+        .admin-dashboard.active { bottom: 0; }
-+
-+        .upload-zone {
-+            border: 2px dashed rgba(255, 255, 255, 0.35);
-+            border-radius: 14px;
-+            min-height: 190px;
-+            display: flex;
-+            align-items: center;
-+            justify-content: center;
-             text-align: center;
--            color: #94a3b8;
--            font-size: 10px;
-+            padding: 14px;
-+            transition: border-color 0.25s ease, background-color 0.25s ease;
-+        }
-+
-+        .upload-zone.dragover {
-+            border-color: var(--success-green);
-+            background: rgba(34, 197, 94, 0.1);
-+        }
-+
-+        .preview-image {
-+            max-height: 140px;
-+            border-radius: 10px;
-+            object-fit: cover;
-+            transform-origin: center;
-+            transition: transform 0.2s ease;
-+        }
-+
-+        .tab {
-+            border: 1px solid rgba(255, 255, 255, 0.22);
-+            border-radius: 999px;
-+            padding: 7px 13px;
-+            font-size: 12px;
-             cursor: pointer;
--            flex: 1;
-         }
--        .nav-item.active {
--            color: #3b82f6; /* Blue active state */
-+        .tab.active {
-+            border-color: transparent;
-+            background: linear-gradient(90deg, rgba(255,106,0,0.95), rgba(0,212,255,0.95));
-+            color: #121212;
-+            font-weight: 700;
-+        }
-+
-+        .push-status {
-+            font-size: 13px;
-+            min-height: 20px;
-+        }
-+
-+        .spinner {
-+            width: 16px;
-+            height: 16px;
-+            border-radius: 50%;
-+            border: 2px solid rgba(255,255,255,0.3);
-+            border-top-color: var(--off-white);
-+            display: inline-block;
-+            animation: spin 0.85s linear infinite;
-+            vertical-align: middle;
-+            margin-right: 8px;
-         }
--        .nav-item i {
--            font-size: 18px;
--            display: block;
--            margin-bottom: 2px;
-+
-+        @keyframes spin { to { transform: rotate(360deg); } }
-+
-+        @media (max-width: 1024px) {
-+            .product-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-+        }
-+
-+        @media (max-width: 768px) {
-+            .product-grid { grid-template-columns: 1fr; gap: 16px; }
-+            .hero { min-height: 230px; }
-+            .admin-dashboard {
-+                top: 0;
-+                bottom: auto;
-+                left: 0;
-+                right: 0;
-+                border-radius: 0;
-+                max-height: 100vh;
-+                height: 100vh;
-+                transform: translateY(100%);
-+                transition: transform 0.35s ease;
-+            }
-+            .admin-dashboard.active {
-+                bottom: auto;
-+                transform: translateY(0);
-+            }
-+            .sticky-wa-mobile {
-+                position: sticky;
-+                bottom: 10px;
-+                z-index: 20;
-+            }
-         }
-     </style>
- </head>
--
- <body>
-+    <header class="sticky top-0 z-50 border-b border-white/10 bg-[#121212]/95 backdrop-blur px-4 py-3">
-+        <div class="mx-auto flex max-w-6xl items-center gap-3">
-+            <div class="brand text-lg sm:text-xl">Jersey Nova</div>
-+            <div class="relative flex-1">
-+                <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-xs text-white/60"></i>
-+                <input id="searchInput" type="text" placeholder="Search by Jersey Code (e.g., DEE-422)" class="w-full rounded-full border border-white/15 bg-white/5 py-2 pl-9 pr-3 text-sm text-[#f3f3f2] outline-none focus:border-cyan-400" />
-+            </div>
-+            <button class="rounded-full border border-white/20 px-3 py-2 text-sm hover:border-cyan-300" title="Cart">
-+                <i class="fa-solid fa-cart-shopping"></i>
-+            </button>
-+        </div>
-+    </header>
- 
--<header class="flex items-center justify-between px-5 py-4 bg-[#0b1120] sticky top-0 z-50 border-b border-gray-800">
--    <i class="fas fa-bars nav-icon" onclick="toggleMenu()"></i>
-+    <main class="mx-auto max-w-6xl px-4 py-6">
-+        <section id="hero" class="hero p-6 sm:p-8">
-+            <div class="hero-content flex h-full flex-col justify-end gap-3">
-+                <span class="trending-badge"><i class="fa-solid fa-fire"></i> Trending Now</span>
-+                <h1 id="heroTitle" class="text-2xl font-extrabold sm:text-4xl">Dragon Edition Drop</h1>
-+                <p id="heroTagline" class="max-w-xl text-sm text-white/90 sm:text-base">Cinematic vibes, premium fit, battle-ready design language.</p>
-+            </div>
-+        </section>
- 
--    <div class="text-2xl font-bold text-blue-500 brand-font">
--        JERSEY NOVA
--    </div>
-+        <section class="mt-8">
-+            <div class="mb-4 flex items-center justify-between gap-4">
-+                <h2 class="text-xl font-bold">Magic Grid Jerseys</h2>
-+                <a class="text-xs text-cyan-300" href="https://www.facebook.com/JerseyNovaBD" target="_blank" rel="noreferrer">Facebook Page</a>
-+            </div>
-+            <div id="productGrid" class="product-grid"></div>
-+        </section>
-+
-+        <section class="mt-8 grid gap-3 rounded-2xl border border-white/10 bg-white/5 p-4 text-sm sm:grid-cols-3">
-+            <div><strong>WhatsApp:</strong> <a class="text-cyan-300" href="https://wa.me/8801907966882" target="_blank" rel="noreferrer">+8801907966882</a></div>
-+            <div><strong>bKash:</strong> 01907966882</div>
-+            <div><strong>Firebase:</strong> <a class="text-cyan-300" href="https://jersey-nova-default-rtdb.firebaseio.com" target="_blank" rel="noreferrer">Database Link</a></div>
-+        </section>
-+    </main>
-+
-+    <footer class="mt-10 border-t border-white/10">
-+        <p id="copyrightTrigger" class="hidden-admin-trigger">© 2026 Jersey Nova. All rights reserved.</p>
-+    </footer>
- 
--    <div class="flex items-center space-x-5">
--        <i class="fas fa-sun nav-icon" onclick="toggleDarkMode()"></i>
--        <div class="profile-glitch-wrapper" onclick="goPage('profile')">
--            <i class="far fa-user profile-glitch-icon"></i>
-+    <div id="loginOverlay" class="overlay">
-+        <div class="login-box glass">
-+            <div class="mb-4 flex items-center justify-between">
-+                <h3 class="text-lg font-bold">Admin Login</h3>
-+                <button id="closeLogin" class="text-white/70 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
-+            </div>
-+            <form id="loginForm" class="space-y-3">
-+                <input id="adminEmail" type="email" required placeholder="Email" class="w-full rounded-lg border border-white/20 bg-black/30 px-3 py-2 outline-none focus:border-cyan-400" />
-+                <input id="adminPassword" type="password" required placeholder="Password" class="w-full rounded-lg border border-white/20 bg-black/30 px-3 py-2 outline-none focus:border-cyan-400" />
-+                <button type="submit" class="sport-btn w-full rounded-lg px-4 py-2">Unlock Dashboard</button>
-+                <p id="loginMsg" class="text-xs text-red-300"></p>
-+            </form>
-         </div>
-     </div>
--</header>
- 
--<section class="px-3 mt-3">
--    <div class="w-full h-40 bg-gradient-to-r from-blue-900 via-blue-700 to-black rounded-xl flex flex-col items-center justify-center border border-blue-500/30 p-5 text-center">
--        <p class="text-blue-200 text-xs font-bold uppercase tracking-wider">New Arrival</p>
--        <h1 class="text-2xl font-bold text-white mt-1">Uchiha Edition Jersey</h1>
--        <p class="text-blue-300 text-sm mt-1 italic">Limitless Style, Ultimate Comfort</p>
--    </div>
--</section>
-+    <aside id="adminDashboard" class="admin-dashboard">
-+        <div class="mx-auto max-w-6xl">
-+            <div class="mb-4 flex items-center justify-between">
-+                <h3 class="text-lg font-bold">Admin Dashboard</h3>
-+                <button id="closeDashboard" class="rounded-full border border-white/20 px-3 py-1 text-sm">Close</button>
-+            </div>
- 
--<section class="grid grid-cols-4 gap-2 px-3 mt-6">
--    <div class="feature-box">
--        <i class="fas fa-truck"></i>
--        <p>FAST SHIPPING</p>
--    </div>
--    <div class="feature-box">
--        <i class="fas fa-undo"></i>
--        <p>EASY RETURNS</p>
--    </div>
--    <div class="feature-box">
--        <i class="fas fa-ribbon"></i>
--        <p>PREMIUM QUALITY</p>
--    </div>
--    <div class="feature-box">
--        <i class="fas fa-headset"></i>
--        <p>24/7 SUPPORT</p>
--    </div>
--</section>
--
--<div class="px-4 mt-10">
--    <h2 class="text-lg font-bold uppercase border-l-4 border-blue-500 pl-2">
--        Collections
--    </h2>
--</div>
--
--<section class="grid grid-cols-2 gap-4 px-4 mt-6">
--    <div class="category-card" onclick="openCategory('IPL 2024')">
--        <div class="h-40 bg-gray-800 flex items-center justify-center text-gray-600 font-bold">IPL Jersey</div>
--        <div class="p-3 text-center bg-[#1e293b] font-bold text-blue-100">IPL 2024</div>
--    </div>
--    <div class="category-card" onclick="openCategory('PSL 2024')">
--        <div class="h-40 bg-gray-800 flex items-center justify-center text-gray-600 font-bold">PSL Jersey</div>
--        <div class="p-3 text-center bg-[#1e293b] font-bold text-blue-100">PSL 2024</div>
--    </div>
--</section>
-+            <div class="grid gap-5 lg:grid-cols-2">
-+                <div class="space-y-4">
-+                    <div id="uploadZone" class="upload-zone">
-+                        <div>
-+                            <i class="fa-solid fa-cloud-arrow-up text-3xl text-cyan-300"></i>
-+                            <p class="mt-2 text-sm">Drag & Drop jersey image here or click to choose</p>
-+                            <input id="imageInput" type="file" accept="image/*" class="mt-2 text-xs" />
-+                            <div id="previewContainer" class="mt-3"></div>
-+                        </div>
-+                    </div>
- 
--<nav class="bottom-nav">
--    <div class="nav-item active" id="nav-home" onclick="handleNav(this, 'home')">
--        <i class="fas fa-home"></i>
--        Home
--    </div>
--    <div class="nav-item" id="nav-category" onclick="handleNav(this, 'category')">
--        <i class="fas fa-th-large"></i>
--        Category
--    </div>
--    <div class="nav-item" id="nav-search" onclick="handleNav(this, 'search')">
--        <i class="fas fa-search"></i>
--        Search
--    </div>
--    <div class="nav-item" id="nav-cart" onclick="handleNav(this, 'cart')">
--        <i class="fas fa-shopping-cart"></i>
--        Cart
--    </div>
--    <div class="nav-item" id="nav-wishlist" onclick="handleNav(this, 'wishlist')">
--        <i class="far fa-heart"></i>
--        Wishlist
--    </div>
--</nav>
--
--<script>
--    // 1. সব ক্যাটাগরি এবং পেজ ফাংশন ঠিক করা হয়েছে।
--    
--    // ক্যাটাগরি ওপেন করার জন্য ফাংশন
--    function openCategory(categoryName) {
--        console.log("Opening category: " + categoryName);
--        alert(categoryName + " Category Opening... (This will soon redirect)");
--        // Future: window.location.href = '/category/' + categoryName.toLowerCase().replace(' ', '-');
--    }
--
--    // পেজ রিডাইরেক্টের জন্য ফাংশন
--    function goPage(pageName) {
--        console.log("Navigating to page: " + pageName);
--        alert("Navigating to: " + pageName + " page... (Under construction)");
--        // Future: window.location.href = '/' + pageName;
--    }
--
--    // 2. নিচের নেভিগেশনে একটিভ ক্লাস হ্যান্ডেল করার জন্য নতুন ফাংশন
--    function handleNav(element, pageName) {
--        // সব আইটেম থেকে 'active' ক্লাস সরিয়ে ফেলা
--        document.querySelectorAll('.nav-item').forEach(item => {
--            item.classList.remove('active');
-+                    <div class="flex items-center gap-2">
-+                        <button id="rotateBtn" type="button" class="rounded-md border border-white/20 px-3 py-2 text-xs">Rotate 90°</button>
-+                        <label class="text-xs">Crop/Zoom <input id="zoomSlider" type="range" min="0.8" max="1.4" step="0.05" value="1" /></label>
-+                    </div>
-+
-+                    <div class="space-y-3">
-+                        <input id="titleInput" type="text" placeholder="Jersey Name (e.g., DEE-422 Dragon)" class="w-full rounded-lg border border-white/20 bg-black/20 px-3 py-2 outline-none focus:border-orange-400" />
-+                        <input id="priceInput" type="number" placeholder="Price (৳)" class="w-full rounded-lg border border-white/20 bg-black/20 px-3 py-2 outline-none focus:border-orange-400" />
-+                        <div>
-+                            <p class="mb-2 text-xs uppercase text-white/70">Category</p>
-+                            <div id="categoryTabs" class="flex flex-wrap gap-2">
-+                                <button class="tab active" data-category="Football" type="button">Football</button>
-+                                <button class="tab" data-category="Cricket" type="button">Cricket</button>
-+                                <button class="tab" data-category="Anime" type="button">Anime</button>
-+                            </div>
-+                        </div>
-+                        <textarea id="detailsInput" rows="3" placeholder="Details (e.g., 180 GSM, Micro-Fiber)" class="w-full rounded-lg border border-white/20 bg-black/20 px-3 py-2 outline-none focus:border-orange-400"></textarea>
-+                    </div>
-+                </div>
-+
-+                <div class="space-y-4">
-+                    <h4 class="text-sm uppercase tracking-wider text-cyan-300">Live Preview Card</h4>
-+                    <article class="product-card">
-+                        <div class="h-52 border-b border-white/10 bg-cover bg-center" id="livePreviewImage" style="background-image: url('https://images.unsplash.com/photo-1577212017308-055e6f68f0f6?auto=format&fit=crop&w=1000&q=80');"></div>
-+                        <div class="space-y-2 p-4">
-+                            <div class="text-xs text-cyan-300" id="livePreviewCategory">Football</div>
-+                            <h5 class="font-bold" id="livePreviewTitle">DEE-422 Dragon</h5>
-+                            <p class="text-sm text-white/80" id="livePreviewDetails">180 GSM, Micro-Fiber</p>
-+                            <p class="text-lg font-extrabold text-orange-400" id="livePreviewPrice">৳1450</p>
-+                            <button class="wa-btn sticky-wa-mobile">Order on WhatsApp</button>
-+                        </div>
-+                    </article>
-+
-+                    <button id="pushLiveBtn" class="sport-btn w-full rounded-lg px-4 py-3">Push to Live</button>
-+                    <p id="pushStatus" class="push-status text-white/75"></p>
-+                </div>
-+            </div>
-+        </div>
-+    </aside>
-+
-+    <script>
-+        const heroSlides = [
-+            {
-+                image: "https://images.unsplash.com/photo-1608346128025-1896b97a6fa7?auto=format&fit=crop&w=1500&q=80",
-+                title: "Dragon Edition Drop",
-+                tagline: "Cinematic vibes, premium fit, battle-ready design language."
-+            },
-+            {
-+                image: "https://images.unsplash.com/photo-1517649763962-0c623066013b?auto=format&fit=crop&w=1500&q=80",
-+                title: "Uchiha Anime Aura",
-+                tagline: "Neon detailing with all-season breathable performance fabric."
-+            },
-+            {
-+                image: "https://images.unsplash.com/photo-1560272564-c83b66b1ad12?auto=format&fit=crop&w=1500&q=80",
-+                title: "Night Match Collection",
-+                tagline: "Premium sporty dark look made for fans and players alike."
-+            }
-+        ];
-+
-+        const baseProducts = [
-+            {
-+                code: "DEE-422",
-+                name: "DEE-422 Dragon Edition",
-+                price: 1450,
-+                details: "180 GSM, Micro-Fiber",
-+                category: "Anime",
-+                frontImage: "https://images.unsplash.com/photo-1577212017308-055e6f68f0f6?auto=format&fit=crop&w=1000&q=80",
-+                backImage: "https://images.unsplash.com/photo-1511886929837-354d827aae26?auto=format&fit=crop&w=1000&q=80"
-+            },
-+            {
-+                code: "UCH-777",
-+                name: "UCH-777 Uchiha Core",
-+                price: 1650,
-+                details: "200 GSM, Anti-Sweat Mesh",
-+                category: "Anime",
-+                frontImage: "https://images.unsplash.com/photo-1543326727-cf6c39e8f84c?auto=format&fit=crop&w=1000&q=80",
-+                backImage: "https://images.unsplash.com/photo-1552674605-db6ffd4facb5?auto=format&fit=crop&w=1000&q=80"
-+            },
-+            {
-+                code: "FBL-101",
-+                name: "FBL-101 Street Football",
-+                price: 1250,
-+                details: "170 GSM, Breathable Knit",
-+                category: "Football",
-+                frontImage: "https://images.unsplash.com/photo-1471295253337-3ceaaedca402?auto=format&fit=crop&w=1000&q=80",
-+                backImage: "https://images.unsplash.com/photo-1517466787929-bc90951d0974?auto=format&fit=crop&w=1000&q=80"
-+            }
-+        ];
-+
-+        let products = [...baseProducts];
-+        let selectedCategory = 'Football';
-+        let uploadedImage = '';
-+        let rotation = 0;
-+        let zoom = 1;
-+
-+        const heroEl = document.getElementById('hero');
-+        const heroTitleEl = document.getElementById('heroTitle');
-+        const heroTaglineEl = document.getElementById('heroTagline');
-+        const productGridEl = document.getElementById('productGrid');
-+        const searchInput = document.getElementById('searchInput');
-+
-+        const loginOverlay = document.getElementById('loginOverlay');
-+        const loginForm = document.getElementById('loginForm');
-+        const loginMsg = document.getElementById('loginMsg');
-+        const closeLogin = document.getElementById('closeLogin');
-+        const adminDashboard = document.getElementById('adminDashboard');
-+        const closeDashboard = document.getElementById('closeDashboard');
-+        const copyrightTrigger = document.getElementById('copyrightTrigger');
-+
-+        const uploadZone = document.getElementById('uploadZone');
-+        const imageInput = document.getElementById('imageInput');
-+        const previewContainer = document.getElementById('previewContainer');
-+        const rotateBtn = document.getElementById('rotateBtn');
-+        const zoomSlider = document.getElementById('zoomSlider');
-+
-+        const titleInput = document.getElementById('titleInput');
-+        const priceInput = document.getElementById('priceInput');
-+        const detailsInput = document.getElementById('detailsInput');
-+        const categoryTabs = document.getElementById('categoryTabs');
-+
-+        const livePreviewImage = document.getElementById('livePreviewImage');
-+        const livePreviewTitle = document.getElementById('livePreviewTitle');
-+        const livePreviewPrice = document.getElementById('livePreviewPrice');
-+        const livePreviewDetails = document.getElementById('livePreviewDetails');
-+        const livePreviewCategory = document.getElementById('livePreviewCategory');
-+
-+        const pushLiveBtn = document.getElementById('pushLiveBtn');
-+        const pushStatus = document.getElementById('pushStatus');
-+
-+        function renderProducts(list) {
-+            if (!list.length) {
-+                productGridEl.innerHTML = '<p class="col-span-full rounded-xl border border-white/15 bg-white/5 p-6 text-center text-white/70">No jersey matched this code.</p>';
-+                return;
-+            }
-+
-+            productGridEl.innerHTML = list.map((p) => `
-+                <article class="product-card glass">
-+                    <div class="flip-wrap">
-+                        <div class="flip-inner">
-+                            <div class="flip-face" style="background-image:url('${p.frontImage}')"></div>
-+                            <div class="flip-face flip-back" style="background-image:url('${p.backImage}')"></div>
-+                        </div>
-+                    </div>
-+                    <div class="p-4 space-y-2">
-+                        <div class="text-xs uppercase tracking-wide text-cyan-300">${p.code} · ${p.category}</div>
-+                        <h3 class="font-bold">${p.name}</h3>
-+                        <p class="text-sm text-white/75">${p.details}</p>
-+                        <p class="text-lg font-extrabold text-orange-400">৳${p.price}</p>
-+                        <a class="wa-btn inline-flex items-center justify-center gap-2" href="https://wa.me/8801907966882?text=I%20want%20to%20order%20${encodeURIComponent(p.code)}" target="_blank" rel="noreferrer"><i class="fa-brands fa-whatsapp"></i> Order on WhatsApp</a>
-+                    </div>
-+                </article>
-+            `).join('');
-+        }
-+
-+        function updateLivePreview() {
-+            const name = titleInput.value.trim() || 'DEE-422 Dragon';
-+            const price = priceInput.value ? `৳${priceInput.value}` : '৳1450';
-+            const details = detailsInput.value.trim() || '180 GSM, Micro-Fiber';
-+
-+            livePreviewTitle.textContent = name;
-+            livePreviewPrice.textContent = price;
-+            livePreviewDetails.textContent = details;
-+            livePreviewCategory.textContent = selectedCategory;
-+            if (uploadedImage) {
-+                livePreviewImage.style.backgroundImage = `url('${uploadedImage}')`;
-+            }
-+        }
-+
-+        function setPreviewTransform() {
-+            const img = previewContainer.querySelector('img');
-+            if (img) {
-+                img.style.transform = `rotate(${rotation}deg) scale(${zoom})`;
-+            }
-+        }
-+
-+        function setImageFile(file) {
-+            if (!file || !file.type.startsWith('image/')) return;
-+            const reader = new FileReader();
-+            reader.onload = () => {
-+                uploadedImage = reader.result;
-+                previewContainer.innerHTML = `<img src="${uploadedImage}" alt="Uploaded preview" class="preview-image" />`;
-+                setPreviewTransform();
-+                updateLivePreview();
-+            };
-+            reader.readAsDataURL(file);
-+        }
-+
-+        searchInput.addEventListener('input', (e) => {
-+            const q = e.target.value.trim().toLowerCase();
-+            const filtered = products.filter((p) => `${p.code} ${p.name}`.toLowerCase().includes(q));
-+            renderProducts(filtered);
-+        });
-+
-+        categoryTabs.addEventListener('click', (e) => {
-+            const btn = e.target.closest('.tab');
-+            if (!btn) return;
-+            [...categoryTabs.querySelectorAll('.tab')].forEach((tab) => tab.classList.remove('active'));
-+            btn.classList.add('active');
-+            selectedCategory = btn.dataset.category;
-+            updateLivePreview();
-+        });
-+
-+        [titleInput, priceInput, detailsInput].forEach((el) => el.addEventListener('input', updateLivePreview));
-+
-+        ['dragenter', 'dragover'].forEach((eventName) => {
-+            uploadZone.addEventListener(eventName, (e) => {
-+                e.preventDefault();
-+                uploadZone.classList.add('dragover');
-+            });
-+        });
-+
-+        ['dragleave', 'drop'].forEach((eventName) => {
-+            uploadZone.addEventListener(eventName, (e) => {
-+                e.preventDefault();
-+                if (eventName === 'drop') {
-+                    const file = e.dataTransfer.files[0];
-+                    setImageFile(file);
-+                }
-+                uploadZone.classList.remove('dragover');
-+            });
-+        });
-+
-+        imageInput.addEventListener('change', (e) => setImageFile(e.target.files[0]));
-+
-+        rotateBtn.addEventListener('click', () => {
-+            rotation = (rotation + 90) % 360;
-+            setPreviewTransform();
-+        });
-+
-+        zoomSlider.addEventListener('input', (e) => {
-+            zoom = Number(e.target.value);
-+            setPreviewTransform();
-         });
--        
--        // ক্লিক করা আইটেমে 'active' ক্লাস যোগ করা
--        element.classList.add('active');
--        
--        // ফাংশন কল করা
--        goPage(pageName);
--    }
--
--    // অতিরিক্ত ফাংশন: মেনু এবং ডার্ক মোড
--    function toggleMenu() {
--        alert("Main Menu Toggle Clicked!");
--    }
--    function toggleDarkMode() {
--        alert("Dark Mode Toggle Clicked! (Future Theme Switcher)");
--    }
--</script>
- 
-+        pushLiveBtn.addEventListener('click', () => {
-+            pushLiveBtn.disabled = true;
-+            pushStatus.innerHTML = '<span class="spinner"></span>Updating Store...';
-+
-+            setTimeout(() => {
-+                const newItem = {
-+                    code: `ADM-${Math.floor(Math.random() * 900 + 100)}`,
-+                    name: titleInput.value.trim() || 'Admin Jersey',
-+                    price: Number(priceInput.value) || 0,
-+                    details: detailsInput.value.trim() || 'No details provided',
-+                    category: selectedCategory,
-+                    frontImage: uploadedImage || 'https://images.unsplash.com/photo-1517649763962-0c623066013b?auto=format&fit=crop&w=1000&q=80',
-+                    backImage: uploadedImage || 'https://images.unsplash.com/photo-1543326727-cf6c39e8f84c?auto=format&fit=crop&w=1000&q=80'
-+                };
-+
-+                products = [newItem, ...products];
-+                renderProducts(products);
-+                pushStatus.innerHTML = '✅ Live updated locally. To auto-commit GitHub, connect this button with your backend/GitHub Action token workflow.';
-+                pushLiveBtn.disabled = false;
-+            }, 1800);
-+        });
-+
-+        closeLogin.addEventListener('click', () => loginOverlay.classList.remove('active'));
-+        closeDashboard.addEventListener('click', () => adminDashboard.classList.remove('active'));
-+
-+        loginForm.addEventListener('submit', (e) => {
-+            e.preventDefault();
-+            const email = document.getElementById('adminEmail').value.trim();
-+            const password = document.getElementById('adminPassword').value;
-+
-+            if (email && password === 'novaadmin123') {
-+                loginMsg.textContent = '';
-+                loginOverlay.classList.remove('active');
-+                adminDashboard.classList.add('active');
-+            } else {
-+                loginMsg.textContent = 'Invalid credentials. Demo password: novaadmin123';
-+            }
-+        });
-+
-+        copyrightTrigger.addEventListener('dblclick', () => {
-+            loginOverlay.classList.add('active');
-+        });
-+
-+        let holdTimer;
-+        ['pointerdown', 'touchstart'].forEach((eventName) => {
-+            copyrightTrigger.addEventListener(eventName, () => {
-+                holdTimer = setTimeout(() => loginOverlay.classList.add('active'), 3000);
-+            });
-+        });
-+        ['pointerup', 'pointerleave', 'touchend', 'touchcancel'].forEach((eventName) => {
-+            copyrightTrigger.addEventListener(eventName, () => clearTimeout(holdTimer));
-+        });
-+
-+        let slideIndex = 0;
-+        function renderHeroSlide() {
-+            const slide = heroSlides[slideIndex % heroSlides.length];
-+            heroEl.style.backgroundImage = `url('${slide.image}')`;
-+            heroTitleEl.textContent = slide.title;
-+            heroTaglineEl.textContent = slide.tagline;
-+            slideIndex += 1;
-+        }
-+
-+        renderHeroSlide();
-+        setInterval(renderHeroSlide, 4200);
-+        renderProducts(products);
-+        updateLivePreview();
-+    </script>
- </body>
- </html>
- 
-EOF
-)
+import React, { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { ShoppingCart, Upload, X } from "lucide-react";
+
+// ===== Firebase Placeholder =====
+// Replace with your real Firebase config
+const firebaseConfig = {
+  databaseURL: "https://jersey-nova-default-rtdb.firebaseio.com",
+};
+
+export default function JerseyNovaApp() {
+  const [products, setProducts] = useState([]);
+  const [showLogin, setShowLogin] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [holdTimer, setHoldTimer] = useState(null);
+
+  const [form, setForm] = useState({
+    title: "",
+    price: "",
+    category: "Football",
+    details: "",
+    image: null,
+  });
+
+  // ===== Hidden Admin Trigger =====
+  const handleMouseDown = () => {
+    const timer = setTimeout(() => {
+      setShowLogin(true);
+    }, 3000);
+    setHoldTimer(timer);
+  };
+
+  const handleMouseUp = () => {
+    clearTimeout(holdTimer);
+  };
+
+  // ===== Login Check =====
+  const handleLogin = (e) => {
+    e.preventDefault();
+    const email = e.target.email.value;
+    const password = e.target.password.value;
+
+    if (email === "admin@jersey.com" && password === "sahil882") {
+      setIsAdmin(true);
+      setShowLogin(false);
+    } else {
+      alert("Access Denied");
+    }
+  };
+
+  // ===== Image Upload =====
+  const handleImage = (file) => {
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setForm({ ...form, image: reader.result });
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    const file = e.dataTransfer.files[0];
+    if (file) handleImage(file);
+  };
+
+  const handlePublish = () => {
+    if (!form.title || !form.price || !form.image) {
+      alert("Fill all fields");
+      return;
+    }
+
+    setProducts([...products, form]);
+
+    setForm({
+      title: "",
+      price: "",
+      category: "Football",
+      details: "",
+      image: null,
+    });
+
+    alert("Product Published Successfully");
+  };
+
+  return (
+    <div className="min-h-screen bg-[#121212] text-white">
+      {/* Header */}
+      <header className="sticky top-0 bg-black/80 backdrop-blur border-b border-gray-800 z-50">
+        <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+          <h1 className="text-xl font-bold text-orange-500 drop-shadow-lg">
+            Jersey Nova
+          </h1>
+
+          <input
+            type="text"
+            placeholder="Search jersey code..."
+            className="bg-gray-900 px-3 py-2 rounded-xl w-1/3 text-sm"
+          />
+
+          <ShoppingCart className="w-6 h-6" />
+        </div>
+      </header>
+
+      {/* Hero */}
+      <section className="p-6 text-center">
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="bg-gradient-to-r from-orange-500 to-blue-500 rounded-2xl p-10 shadow-lg"
+        >
+          <h2 className="text-3xl font-bold mb-2">Trending Now</h2>
+          <p>Dragon Edition & Anime Jerseys</p>
+        </motion.div>
+      </section>
+
+      {/* Product Grid */}
+      <section className="max-w-7xl mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-4">
+        {products.map((p, i) => (
+          <motion.div
+            key={i}
+            whileHover={{ scale: 1.05 }}
+            className="bg-white/5 backdrop-blur rounded-2xl p-3 shadow"
+          >
+            <img
+              src={p.image}
+              alt="jersey"
+              className="rounded-xl mb-2"
+            />
+
+            <h3 className="font-semibold">{p.title}</h3>
+            <p className="text-orange-400">৳ {p.price}</p>
+
+            <a
+              href="https://wa.me/8801907966882"
+              target="_blank"
+              className="block mt-2 bg-green-600 text-center py-2 rounded-xl"
+            >
+              Order on WhatsApp
+            </a>
+          </motion.div>
+        ))}
+      </section>
+
+      {/* Footer Hidden Trigger */}
+      <footer className="text-center text-gray-400 mt-10 py-6">
+        <span
+          onMouseDown={handleMouseDown}
+          onMouseUp={handleMouseUp}
+          onDoubleClick={() => setShowLogin(true)}
+          className="cursor-pointer"
+        >
+          © 2026 Jersey Nova
+        </span>
+      </footer>
+
+      {/* Login Modal */}
+      <AnimatePresence>
+        {showLogin && (
+          <motion.div
+            className="fixed inset-0 bg-black/70 flex items-center justify-center"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+          >
+            <motion.form
+              onSubmit={handleLogin}
+              className="bg-gray-900 p-6 rounded-2xl w-80 space-y-3"
+            >
+              <h2 className="text-xl font-bold text-center">Admin Login</h2>
+
+              <input
+                name="email"
+                placeholder="Email"
+                className="w-full p-2 rounded bg-black"
+              />
+
+              <input
+                name="password"
+                type="password"
+                placeholder="Password"
+                className="w-full p-2 rounded bg-black"
+              />
+
+              <button className="w-full bg-orange-500 py-2 rounded">
+                Login
+              </button>
+            </motion.form>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Admin Panel */}
+      <AnimatePresence>
+        {isAdmin && (
+          <motion.div
+            initial={{ y: "100%" }}
+            animate={{ y: 0 }}
+            exit={{ y: "100%" }}
+            className="fixed bottom-0 left-0 right-0 bg-gray-950 border-t border-gray-800 p-6 grid md:grid-cols-2 gap-6"
+          >
+            <div
+              onDragOver={(e) => e.preventDefault()}
+              onDrop={handleDrop}
+              className="border-2 border-dashed border-gray-600 rounded-2xl p-6 text-center"
+            >
+              <Upload className="mx-auto mb-2" />
+              <p>Drag & Drop Image</p>
+
+              {form.image && (
+                <img
+                  src={form.image}
+                  alt="preview"
+                  className="mt-3 rounded-xl"
+                />
+              )}
+
+              <input
+                type="file"
+                className="mt-3"
+                onChange={(e) => handleImage(e.target.files[0])}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <input
+                placeholder="Jersey Name"
+                value={form.title}
+                onChange={(e) =>
+                  setForm({ ...form, title: e.target.value })
+                }
+                className="w-full p-2 rounded bg-black"
+              />
+
+              <input
+                placeholder="Price"
+                value={form.price}
+                onChange={(e) =>
+                  setForm({ ...form, price: e.target.value })
+                }
+                className="w-full p-2 rounded bg-black"
+              />
+
+              <select
+                value={form.category}
+                onChange={(e) =>
+                  setForm({ ...form, category: e.target.value })
+                }
+                className="w-full p-2 rounded bg-black"
+              >
+                <option>Football</option>
+                <option>Cricket</option>
+                <option>Anime</option>
+              </select>
+
+              <textarea
+                placeholder="Details"
+                value={form.details}
+                onChange={(e) =>
+                  setForm({ ...form, details: e.target.value })
+                }
+                className="w-full p-2 rounded bg-black"
+              />
+
+              <button
+                onClick={handlePublish}
+                className="w-full bg-green-600 py-3 rounded-xl font-bold"
+              >
+                Push to Live
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
