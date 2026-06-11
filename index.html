@@ -1,317 +1,197 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jersey Nova | Premium Sportswear</title>
-    <style>
-        /* --- Brand Theme & Colors --- */
-        :root {
-            --bg-color: #121212;
-            --accent-orange: #ff6b00;
-            --accent-blue: #00e5ff;
-            --text-light: #f5f5f5;
-            --success-green: #39ff14;
-            --glass-bg: rgba(255, 255, 255, 0.05);
-            --glass-border: rgba(255, 255, 255, 0.1);
+// ==========================================
+// 1. tailwind.config.js (ডিজাইন ও নিয়ন কালার সেটআপ)
+// ==========================================
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  content: [
+    "./pages/**/*.{js,ts,jsx,tsx,mdx}",
+    "./components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./app/**/*.{js,ts,jsx,tsx,mdx}",
+  ],
+  theme: {
+    extend: {
+      colors: {
+        cyber: {
+          bg: '#0A0A0A',
+          green: '#00FF9C',
+          blue: '#00E5FF',
+          purple: '#8A2EFF',
+          dark: '#121212',
+          gray: '#1E1E1E'
         }
+      },
+      boxShadow: {
+        'neon-green': '0 0 10px theme("colors.cyber.green"), 0 0 20px theme("colors.cyber.green")',
+        'neon-blue': '0 0 10px theme("colors.cyber.blue"), 0 0 20px theme("colors.cyber.blue")',
+        'neon-purple': '0 0 10px theme("colors.cyber.purple"), 0 0 20px theme("colors.cyber.purple")',
+      }
+    },
+  },
+  plugins: [],
+};
 
-        body {
-            margin: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-light);
-            overflow-x: hidden;
-        }
 
-        /* --- Sticky Header --- */
-        header {
-            position: sticky;
-            top: 0;
-            background: rgba(18, 18, 18, 0.9);
-            backdrop-filter: blur(10px);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 5%;
-            z-index: 100;
-            border-bottom: 1px solid var(--glass-border);
-        }
+// ==========================================
+// 2. app/globals.css (গ্লোবাল স্টাইল ও নিয়ন টেক্সট)
+// ==========================================
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-        .logo {
-            font-size: 24px;
-            font-weight: bold;
-            color: var(--text-light);
-            text-shadow: 0 0 10px var(--accent-orange);
-            text-decoration: none;
-        }
+body {
+  background-color: #0A0A0A;
+  color: #ffffff;
+}
 
-        .search-bar {
-            padding: 8px 15px;
-            border-radius: 20px;
-            border: 1px solid var(--glass-border);
-            background: var(--glass-bg);
-            color: white;
-            width: 300px;
-            outline: none;
-        }
+.text-glow-green {
+  text-shadow: 0 0 10px #00FF9C, 0 0 20px #00FF9C;
+}
+.text-glow-blue {
+  text-shadow: 0 0 10px #00E5FF, 0 0 20px #00E5FF;
+}
 
-        /* --- Hero Section --- */
-        .hero {
-            height: 40vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            background: linear-gradient(45deg, #1a1a1a, #0a0a0a);
-            border-bottom: 1px solid var(--glass-border);
-            text-align: center;
-        }
+/* Background Animated Light Streaks */
+.bg-particles {
+  background-image: radial-gradient(#8A2EFF 1px, transparent 1px);
+  background-size: 50px 50px;
+  opacity: 0.1;
+}
 
-        .btn-shop {
-            padding: 10px 25px;
-            background-color: var(--accent-orange);
-            color: white;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            cursor: pointer;
-            margin-top: 15px;
-            box-shadow: 0 0 15px rgba(255, 107, 0, 0.4);
-            transition: 0.3s;
-        }
 
-        .btn-shop:hover {
-            box-shadow: 0 0 25px rgba(255, 107, 0, 0.8);
-            transform: scale(1.05);
-        }
+// ==========================================
+// 3. app/page.tsx (মূল ওয়েবসাইট - হোমপেজ ও প্রোডাক্ট)
+// ==========================================
+'use client';
+import { useState } from 'react';
+import { ShoppingCart, Search, Package, Settings, Users, BarChart } from 'lucide-react';
 
-        /* --- Product Grid (Magic Grid) --- */
-        .grid-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            padding: 40px 5%;
-        }
+// --- Components ---
 
-        .product-card {
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: 15px;
-            padding: 15px;
-            text-align: center;
-            backdrop-filter: blur(5px);
-            transition: 0.3s;
-        }
-
-        .product-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 10px 20px rgba(0, 229, 255, 0.2);
-        }
-
-        .product-img {
-            width: 100%;
-            height: 200px;
-            background-color: #222;
-            border-radius: 10px;
-            margin-bottom: 15px;
-            object-fit: cover;
-        }
-
-        .btn-whatsapp {
-            display: block;
-            width: 100%;
-            padding: 10px;
-            background-color: #25D366;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            font-weight: bold;
-            margin-top: 10px;
-        }
-
-        /* --- Footer & Secret Trigger --- */
-        footer {
-            text-align: center;
-            padding: 30px;
-            border-top: 1px solid var(--glass-border);
-            margin-top: 50px;
-        }
-
-        #secret-trigger {
-            cursor: default; /* Keep it looking normal */
-            user-select: none;
-        }
-
-        /* --- Hidden Login Modal --- */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.8);
-            backdrop-filter: blur(10px);
-            z-index: 999;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .login-box {
-            background: var(--bg-color);
-            padding: 30px;
-            border-radius: 15px;
-            border: 1px solid var(--accent-blue);
-            box-shadow: 0 0 30px rgba(0, 229, 255, 0.2);
-            text-align: center;
-        }
-
-        .login-box input {
-            display: block;
-            width: 90%;
-            margin: 10px auto;
-            padding: 10px;
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            color: white;
-        }
-
-        /* --- Admin Dashboard UI --- */
-        .admin-dashboard {
-            display: none;
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 60vh;
-            background: #1a1a1a;
-            border-top: 2px solid var(--accent-orange);
-            z-index: 1000;
-            padding: 20px;
-            box-sizing: border-box;
-            animation: slideUp 0.5s ease-out;
-            overflow-y: auto;
-        }
-
-        @keyframes slideUp {
-            from { bottom: -100%; }
-            to { bottom: 0; }
-        }
-
-        .upload-zone {
-            border: 2px dashed var(--accent-orange);
-            padding: 40px;
-            text-align: center;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            color: var(--text-light);
-            transition: 0.3s;
-        }
-
-        .upload-zone:hover {
-            border-color: var(--success-green);
-            background: rgba(57, 255, 20, 0.05);
-        }
-    </style>
-</head>
-<body>
-
-    <header>
-        <a href="#" class="logo">JERSEY NOVA</a>
-        <input type="text" class="search-bar" placeholder="Search jersey code...">
-        <div>🛒</div>
-    </header>
-
-    <div class="hero">
-        <span style="background: var(--accent-blue); padding: 5px 10px; border-radius: 5px; font-size: 12px; margin-bottom: 10px; color: black; font-weight: bold;">TRENDING NOW</span>
-        <h1>Uchiha Anime Edition</h1>
-        <p>Premium 180 GSM Microfiber</p>
-        <button class="btn-shop">Shop Now</button>
+const Navbar = ({ setView }) => (
+  <nav className="flex justify-between items-center p-6 border-b border-cyber-purple/30 bg-cyber-bg/80 backdrop-blur-md sticky top-0 z-50">
+    <div className="text-2xl font-black tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-cyber-blue to-cyber-purple text-glow-blue cursor-pointer" onClick={() => setView('home')}>
+      NEON<span className="text-cyber-green text-glow-green">GEAR</span>
     </div>
-
-    <div class="grid-container">
-        <div class="product-card">
-            <div class="product-img"></div>
-            <h3>DEE-422 Dragon</h3>
-            <p style="color: var(--accent-orange); font-size: 18px; font-weight: bold;">৳ 850</p>
-            <a href="https://wa.me/8801907966882?text=Hello,%20I%20want%20to%20order%20DEE-422%20Dragon" target="_blank" class="btn-whatsapp">Order on WhatsApp</a>
-        </div>
-        <div class="product-card">
-            <div class="product-img"></div>
-            <h3>Argentina Retro</h3>
-            <p style="color: var(--accent-orange); font-size: 18px; font-weight: bold;">৳ 750</p>
-            <a href="https://wa.me/8801907966882?text=Hello,%20I%20want%20to%20order%20Argentina%20Retro" target="_blank" class="btn-whatsapp">Order on WhatsApp</a>
-        </div>
+    <div className="flex gap-6 items-center">
+      <Search className="text-cyber-blue cursor-pointer hover:text-cyber-green transition-colors" />
+      <ShoppingCart className="text-cyber-blue cursor-pointer hover:text-cyber-green transition-colors" />
+      <button onClick={() => setView('admin')} className="text-xs px-3 py-1 border border-cyber-purple text-cyber-purple rounded hover:bg-cyber-purple hover:text-white shadow-neon-purple transition-all">
+        Admin Login
+      </button>
     </div>
+  </nav>
+);
 
-    <footer>
-        <p id="secret-trigger">© 2026 Jersey Nova BD. All Rights Reserved.</p>
-        <a href="https://www.facebook.com/JerseyNovaBD" target="_blank" style="color: gray; text-decoration: none;">Visit Facebook Page</a>
-    </footer>
-
-    <div id="login-modal" class="modal">
-        <div class="login-box">
-            <h2 style="color: var(--accent-blue);">Admin Access</h2>
-            <input type="email" id="admin-email" placeholder="Email">
-            <input type="password" id="admin-pass" placeholder="Password">
-            <button class="btn-shop" onclick="checkLogin()" style="width: 90%;">Login</button>
-            <p id="error-msg" style="color: red; display: none; font-size: 14px;">Access Denied</p>
-            <button onclick="closeModal()" style="margin-top: 15px; background: none; color: gray; border: none; cursor: pointer;">Cancel</button>
-        </div>
+const ProductCard = ({ title, price, isNew }) => (
+  <div className="group relative bg-cyber-gray border border-gray-800 rounded-xl p-4 transition-all duration-300 hover:border-cyber-green hover:shadow-neon-green cursor-pointer">
+    {isNew && <span className="absolute top-4 right-4 bg-cyber-green text-black text-xs font-bold px-2 py-1 rounded shadow-neon-green z-10">NEW DROP</span>}
+    <div className="h-64 w-full bg-cyber-dark rounded-lg mb-4 flex items-center justify-center border border-gray-800 group-hover:border-cyber-green/50 transition-colors">
+      <Package size={64} className="text-cyber-purple/50 group-hover:text-cyber-green transition-all duration-500 group-hover:scale-110" />
     </div>
+    <h3 className="text-lg font-bold group-hover:text-cyber-blue transition-colors">{title}</h3>
+    <p className="text-cyber-green font-mono text-xl mt-1">${price}</p>
+    <button className="w-full mt-4 py-2 bg-transparent border border-cyber-blue text-cyber-blue rounded font-bold hover:bg-cyber-blue hover:text-black hover:shadow-neon-blue transition-all">
+      Add to Cart
+    </button>
+  </div>
+);
 
-    <div id="admin-dashboard" class="admin-dashboard">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-            <h2 style="color: var(--accent-orange); margin: 0;">Jersey Nova Command Center</h2>
-            <button onclick="closeAdmin()" style="background: red; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer;">Close Dashboard</button>
-        </div>
+// --- Main Pages ---
 
-        <div class="upload-zone" id="drop-zone">
-            ☁️ Drag & Drop Jersey Image Here
-        </div>
+const HomePage = () => (
+  <main className="min-h-screen relative">
+    <div className="absolute inset-0 bg-particles pointer-events-none"></div>
+    
+    {/* Hero Section */}
+    <section className="flex flex-col items-center justify-center text-center py-32 px-4 relative">
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-cyber-purple/20 rounded-full blur-[100px]"></div>
+      <h1 className="text-5xl md:text-7xl font-black mb-6 uppercase tracking-wider text-white z-10">
+        Equip Your <br/> <span className="text-cyber-green text-glow-green">Digital Armor</span>
+      </h1>
+      <p className="text-gray-400 text-lg mb-10 max-w-2xl z-10">
+        Premium esports jerseys designed for maximum performance and supreme cyberpunk aesthetics.
+      </p>
+      <div className="flex gap-6 z-10">
+        <button className="px-8 py-3 bg-cyber-green text-black font-bold uppercase tracking-widest rounded shadow-neon-green hover:scale-105 transition-transform">
+          Shop Now
+        </button>
+        <button className="px-8 py-3 bg-transparent border border-cyber-blue text-cyber-blue font-bold uppercase tracking-widest rounded shadow-[0_0_15px_rgba(0,229,255,0.3)] hover:shadow-neon-blue transition-all">
+          Track Order
+        </button>
+      </div>
+    </section>
 
-        <div style="display: grid; gap: 10px; max-width: 400px;">
-            <input type="text" placeholder="Product Title (e.g., DEE-422)" style="padding: 10px; background: #333; color: white; border: none;">
-            <input type="number" placeholder="Price (৳)" style="padding: 10px; background: #333; color: white; border: none;">
-            <select style="padding: 10px; background: #333; color: white; border: none;">
-                <option>Football</option>
-                <option>Cricket</option>
-                <option>Anime</option>
-            </select>
-            <button class="btn-shop" style="width: 100%; background: var(--success-green); color: black;">Push to Live</button>
-        </div>
+    {/* Products Section */}
+    <section className="py-20 px-10 max-w-7xl mx-auto z-10 relative">
+      <h2 className="text-3xl font-bold mb-10 text-cyber-blue text-glow-blue uppercase border-l-4 border-cyber-blue pl-4">Latest Drops</h2>
+      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <ProductCard title="Phantom Assassin Jersey" price="59.99" isNew={true} />
+        <ProductCard title="Neon Drift V2" price="65.00" isNew={false} />
+        <ProductCard title="Cyber Samurai Hoodie" price="89.99" isNew={true} />
+        <ProductCard title="Glitch Core Tee" price="35.00" isNew={false} />
+      </div>
+    </section>
+  </main>
+);
+
+const AdminDashboard = () => (
+  <div className="min-h-screen flex bg-cyber-bg">
+    {/* Admin Sidebar */}
+    <aside className="w-64 border-r border-cyber-purple/30 p-6 flex flex-col gap-6">
+      <div className="text-xl font-bold text-cyber-purple text-glow-purple mb-8">ADMIN_PANEL</div>
+      <button className="flex items-center gap-3 text-gray-400 hover:text-cyber-green transition-colors"><BarChart size={20}/> Dashboard</button>
+      <button className="flex items-center gap-3 text-gray-400 hover:text-cyber-green transition-colors"><Package size={20}/> Products</button>
+      <button className="flex items-center gap-3 text-cyber-green transition-colors"><ShoppingCart size={20}/> Orders</button>
+      <button className="flex items-center gap-3 text-gray-400 hover:text-cyber-green transition-colors"><Users size={20}/> Customers</button>
+      <button className="flex items-center gap-3 text-gray-400 hover:text-cyber-green transition-colors"><Settings size={20}/> Settings</button>
+    </aside>
+
+    {/* Admin Content (Order Management Example) */}
+    <main className="flex-1 p-10">
+      <h2 className="text-3xl font-bold mb-8 text-white">Order Management</h2>
+      <div className="bg-cyber-gray border border-gray-800 rounded-xl p-6">
+        <table className="w-full text-left">
+          <thead>
+            <tr className="border-b border-gray-800 text-cyber-blue">
+              <th className="pb-4">Order ID</th>
+              <th className="pb-4">Customer</th>
+              <th className="pb-4">Status</th>
+              <th className="pb-4">Total</th>
+              <th className="pb-4">Action</th>
+            </tr>
+          </thead>
+          <tbody className="text-gray-300">
+            <tr className="border-b border-gray-800/50">
+              <td className="py-4 font-mono text-cyber-green">#NX-8829</td>
+              <td className="py-4">Alex Mercer</td>
+              <td className="py-4"><span className="bg-yellow-500/20 text-yellow-400 px-2 py-1 rounded text-xs">Printing</span></td>
+              <td className="py-4">$124.99</td>
+              <td className="py-4"><button className="text-cyber-blue hover:text-white">Update</button></td>
+            </tr>
+            <tr>
+              <td className="py-4 font-mono text-cyber-green">#NX-8830</td>
+              <td className="py-4">Sarah Connor</td>
+              <td className="py-4"><span className="bg-cyber-green/20 text-cyber-green px-2 py-1 rounded text-xs">Delivered</span></td>
+              <td className="py-4">$59.99</td>
+              <td className="py-4"><button className="text-cyber-blue hover:text-white">Update</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+);
+
+// --- Root Component ---
+
+export default function App() {
+  const [currentView, setCurrentView] = useState('home');
+
+  return (
+    <div className="bg-cyber-bg text-white font-sans selection:bg-cyber-purple selection:text-white">
+      {currentView !== 'admin' && <Navbar setView={setCurrentView} />}
+      {currentView === 'home' && <HomePage />}
+      {currentView === 'admin' && <AdminDashboard />}
     </div>
-
-    <script>
-        const secretTrigger = document.getElementById('secret-trigger');
-        const loginModal = document.getElementById('login-modal');
-        const adminDashboard = document.getElementById('admin-dashboard');
-        const errorMsg = document.getElementById('error-msg');
-
-        // Double Click Logic to open Secret Door
-        secretTrigger.addEventListener('dblclick', () => {
-            loginModal.style.display = 'flex';
-        });
-
-        function closeModal() {
-            loginModal.style.display = 'none';
-            errorMsg.style.display = 'none';
-        }
-
-        // Basic password check (Will be replaced by Firebase later)
-        function checkLogin() {
-            const pass = document.getElementById('admin-pass').value;
-            if(pass === "nova2026") { // Temporary test password
-                loginModal.style.display = 'none';
-                adminDashboard.style.display = 'block';
-                document.getElementById('admin-pass').value = '';
-                errorMsg.style.display = 'none';
-            } else {
-                errorMsg.style.display = 'block';
-            }
-        }
-
-        function closeAdmin() {
-            adminDashboard.style.display = 'none';
-        }
-    </script>
-</body>
-</html>
+  );
+}
